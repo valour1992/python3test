@@ -1,0 +1,10 @@
+import subprocess
+#for root partition only rt now
+partition = "/"
+threshold = 10
+child = subprocess.Popen(['df', '-h'], stdout=subprocess.PIPE)
+for line  in child.stdout:
+    splitline = line.decode().split()
+    if splitline[5] == partition:
+        if int(splitline[4][:-1]) > threshold:
+            print line
