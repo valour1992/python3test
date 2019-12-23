@@ -1,0 +1,63 @@
+# -*- coding: utf-8 -*-
+
+# Form implementation generated from reading ui file 'Dictionary-app.ui'
+#
+# Created by: PyQt5 UI code generator 5.13.1
+#
+# WARNING! All changes made in this file will be lost!
+
+
+from PyQt5 import QtCore, QtGui, QtWidgets
+import requests
+import urllib.request
+from bs4 import BeautifulSoup
+import json
+
+
+class Ui_Dialog(object):
+    def setupUi(self, Dialog):
+        Dialog.setObjectName("Dialog")
+        Dialog.resize(400, 300)
+        self.lineEdit = QtWidgets.QLineEdit(Dialog)
+        self.lineEdit.setGeometry(QtCore.QRect(200, 50, 181, 41))
+        self.lineEdit.setObjectName("lineEdit")
+        self.label = QtWidgets.QLabel(Dialog)
+        self.label.setGeometry(QtCore.QRect(30, 40, 141, 51))
+        self.label.setMinimumSize(QtCore.QSize(0, 19))
+        self.label.setObjectName("label")
+        self.pushButton = QtWidgets.QPushButton(Dialog)
+        self.pushButton.setGeometry(QtCore.QRect(130, 130, 112, 34))
+        self.pushButton.setObjectName("pushButton")
+        #self.pushButton.clicked.connect(self.meaning)
+
+        self.retranslateUi(Dialog)
+        QtCore.QMetaObject.connectSlotsByName(Dialog)
+
+    def retranslateUi(self, Dialog):
+        _translate = QtCore.QCoreApplication.translate
+        Dialog.setWindowTitle(_translate("Dialog", "Dialog"))
+        self.label.setText(_translate("Dialog", "Enter the word"))
+        self.pushButton.setText(_translate("Dialog", "Search"))
+
+        self.pushButton.clicked.connect(self.meaning)
+
+    def meaning(self):
+        try:
+            word = self.lineEdit.text()
+            URL = "http://www.dictionary.com/cgi-bin/dict.pl?term=%s" % word
+            r = requests.get(URL)
+            soup = BeautifulSoup(r.content, 'lxml')
+            line = soup.find_all('meta')
+            print([meta.attrs['content'] for meta in line if
+                   'name' in meta.attrs and meta.attrs['name'] == 'description'])
+        except BaseException as ex:
+            print(ex)
+
+if __name__ == "__main__":
+    import sys
+    app = QtWidgets.QApplication(sys.argv)
+    Dialog = QtWidgets.QDialog()
+    ui = Ui_Dialog()
+    ui.setupUi(Dialog)
+    Dialog.show()
+    sys.exit(app.exec_())
