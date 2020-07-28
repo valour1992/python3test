@@ -1,0 +1,35 @@
+#!/bin/python
+import sys
+import subprocess
+
+
+
+class svc():
+
+    def __init__(self, service):
+        self.service = service
+
+    def is_active(self):
+        cmd = '/bin/systemctl status %s.service' % self.service
+        proc = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE)
+        stdout_list = proc.communicate()[0].decode("utf-8").split('\n')
+        for line in stdout_list:
+            #print(line)
+            if 'Active:' in line:
+                if '(running)' in line:
+                    print("Servcice is Running")
+                else:
+
+                    print("Service Not Running")
+
+
+    def start(self):
+        cmd = '/bin/systemctl start %s.service' % self.service
+        proc = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE)
+        proc.communicate()
+
+if __name__ == '__main__':
+    # TODO: Show usage
+    monitor = svc(sys.argv[1])
+    if not monitor.is_active():
+        monitor.start()
