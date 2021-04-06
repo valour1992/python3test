@@ -1,0 +1,37 @@
+import os
+pathin = '/home/esngsrj/virtual_env/pathck'
+
+def files_check(pathin=pathin):
+    file_collection = []
+    for (path, dirs, files) in os.walk(pathin):
+        for file in files:
+            file_collection.append(file)
+
+    return file_collection
+        
+
+
+
+
+
+def dir_check(pathin=pathin):
+    dir_collection = []
+    for (path, dirs, files) in os.walk(pathin):
+        for dir in dirs:
+            dir_collection.append(dir)
+    return dir_collection
+
+if __name__ == "__main__":
+     print("\nRecursive listing of all directory:")
+     for dir in dir_check('/home/esngsrj/virtual_env/pathck'):
+         print(dir)
+     print("\nRecursive listing of all  files:")
+     for file in files_check('/home/esngsrj/virtual_env/pathck'):
+        print(file)
+    
+
+
+
+
+     
+       
